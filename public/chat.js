@@ -1,16 +1,21 @@
 const socket = io();
 
-const chatBox = document.getElementById('chat-box');
-const chatInput = document.getElementById('chat-input');
+const form = document.getElementById('message-form');
+const input = document.getElementById('message-input');
+const messagesContainer = document.getElementById('messages');
 
-socket.on('chatMessage', (msg) => {
-    const messageElement = document.createElement('p');
-    messageElement.textContent = msg;
-    chatBox.appendChild(messageElement);
+form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (input.value) {
+        socket.emit('chatMessage', input.value);
+        input.value = '';
+    }
 });
 
-function sendMessage() {
-    const msg = chatInput.value;
-    socket.emit('chatMessage', msg);
-    chatInput.value = '';
-}
+socket.on('chatMessage', function (msg) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', 'other');
+    messageElement.textContent = msg;
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+});

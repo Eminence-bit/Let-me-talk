@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Application</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="chat-container">
-        <div id="messages"></div> <!-- Message display area -->
+        <div id="messages"></div>
         <form id="message-form">
             <input id="message-input" type="text" placeholder="Type your message here..." required>
             <button id="send-button" type="submit">Send</button>
         </form>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js"></script> <!-- Your JS file for Socket.IO handling -->
+    <script src="/socket.io/socket.io.js"></script> <!-- Corrected path -->
+    <script src="chat.js"></script>
 </body>
 </html>
