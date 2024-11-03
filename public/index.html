@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Application</title>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io@4.0.1/dist/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,7 +16,29 @@
             <button id="send-button" type="submit">Send</button>
         </form>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/socket.io@4.0.1/dist/socket.io.min.js"></script>
-    <script src="chat.js"></script>
+    <script >
+        const socket = io('http://localhost:3000');
+
+const form = document.getElementById('message-form');
+const input = document.getElementById('message-input');
+const messagesContainer = document.getElementById('messages');
+
+form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (input.value) {
+        socket.emit('chatMessage', input.value);
+        input.value = '';
+    }
+});
+
+socket.on('chatMessage', function (msg) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', 'other');
+    messageElement.textContent = msg;
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+});
+
+    </script>
 </body>
 </html>

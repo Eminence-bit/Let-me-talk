@@ -1,36 +1,24 @@
-const express = require("express");
-const http = require("http");
-const socketIo = require("socket.io");
-const mongoose = require("mongoose");
-const connectDB = require("./config/db");
-const cors = require("cors");
-const path = require("path");
-
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
-
-connectDB();
-app.use(cors());
-app.use(express.static("public"));
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+const io = new Server(server, {
+    cors: {
+        origin: "*", // Adjust this to allow specific origins in production
+        methods: ["GET", "POST"]
+    }
 });
 
-io.on("connection", (socket) => {
-  console.log("New user connected");
+app.use(express.static('public'));
 
-  socket.on("chatMessage", (msg) => {
-    socket.broadcast.emit("chatMessage", msg);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-  });
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('chatMessage', (msg) => {
+        io.emit('chatMessage', msg);
+    });
 });
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+server.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
 });
